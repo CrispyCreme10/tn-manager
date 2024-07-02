@@ -44,7 +44,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 **utils/** - utility functions for client & server side code
 
 ## Resources
-
 ### Setup
 [ESLint + Prettier + Typescript setup](https://khalilstemmler.com/blogs/tooling/prettier/)
 
@@ -53,6 +52,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 [tailwindcss](https://tailwindcss.com/docs/editor-setup)\
 [shadcn/ui](https://ui.shadcn.com/docs)\
 [Chart.js](https://www.chartjs.org/docs/latest/getting-started/)\
-[TypeORM](https://typeorm.io/)\
+[Prisma](https://www.prisma.io/nextjs)\
 [PostgreSQL](https://www.postgresql.org/docs/current/index.html)\
 [Docker](https://docs.docker.com/manuals/)
+
+### Suggested VS Code Extensions
+[ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)\
+[ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)\
+[Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)\
+[Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)\
+[Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
