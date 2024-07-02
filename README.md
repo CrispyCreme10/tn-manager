@@ -41,16 +41,24 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - Ensure you have [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/install/) installed
 - Run the following commands to run PostgreSQL + pgAdmin
 ```bash
-cd docker/postgres_pgadmin
-docker compose up -d
-
-# to stop containers, use the below command
-# docker compose stop 
+npm run pg-start
+```
+- Run the following command to stop the containers
+```bash
+npm run pg-stop
 ```
 - Use the credentials found in **docker/postgres_pgadmin/docker-compose.yml** to login to pgAdmin and then connect to the local database
 
 #### Apply Database Migrations
-WIP
+To apply database migrations to your local DB, run the following:
+```bash
+npm run apply-migrations
+```
+
+NOTE: Ensure you have the following in a **.env** located in the root dir of the project before running the command above
+```Properties
+  DATABASE_URL="[DB_CONNECTION_STRING_HERE]"
+```
 
 ## Project Structure
 **app/** - where Next.js pages and api routes exist\
@@ -72,7 +80,7 @@ WIP
 [Prisma](https://www.prisma.io/nextjs)\
 [shadcn/ui](https://ui.shadcn.com/docs)\
 [tailwindcss](https://tailwindcss.com/docs/editor-setup)\
-[Typescript](https://www.typescriptlang.org/docs/)\
+[Typescript](https://www.typescriptlang.org/docs/)
 
 ### Suggested VS Code Extensions
 [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)\

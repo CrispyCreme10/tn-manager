@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prettier-format": "prettier --config .prettierrc './**/*.{ts,tsx}' --write",
+    "pg-start": "docker compose -f docker/postgres_pgadmin/docker-compose.yml up -d",
+    "pg-stop": "docker compose -f docker/postgres_pgadmin/docker-compose.yml stop",
     "prisma-migrate": "prisma migrate dev",
     "apply-migrations": "prisma migrate deploy"
   },
