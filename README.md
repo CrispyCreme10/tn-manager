@@ -35,6 +35,23 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## Local Development
+### Database
+#### Tooling Setup
+- Ensure you have [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/install/) installed
+- Run the following commands to run PostgreSQL + pgAdmin
+```bash
+cd docker/postgres_pgadmin
+docker compose up -d
+
+# to stop containers, use the below command
+# docker compose stop 
+```
+- Use the credentials found in **docker/postgres_pgadmin/docker-compose.yml** to login to pgAdmin and then connect to the local database
+
+#### Apply Database Migrations
+WIP
+
 ## Project Structure
 **app/** - where Next.js pages and api routes exist\
 **components/** - reusable react components\
@@ -48,13 +65,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 [ESLint + Prettier + Typescript setup](https://khalilstemmler.com/blogs/tooling/prettier/)
 
 ### Docs
-[Typescript](https://www.typescriptlang.org/docs/)\
-[tailwindcss](https://tailwindcss.com/docs/editor-setup)\
-[shadcn/ui](https://ui.shadcn.com/docs)\
 [Chart.js](https://www.chartjs.org/docs/latest/getting-started/)\
-[Prisma](https://www.prisma.io/nextjs)\
+[Docker](https://docs.docker.com/manuals/)\
+[NextAuth.js](https://next-auth.js.org/getting-started/introduction)\
 [PostgreSQL](https://www.postgresql.org/docs/current/index.html)\
-[Docker](https://docs.docker.com/manuals/)
+[Prisma](https://www.prisma.io/nextjs)\
+[shadcn/ui](https://ui.shadcn.com/docs)\
+[tailwindcss](https://tailwindcss.com/docs/editor-setup)\
+[Typescript](https://www.typescriptlang.org/docs/)\
 
 ### Suggested VS Code Extensions
 [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)\
