@@ -52,6 +52,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 [Typescript](https://www.typescriptlang.org/docs/)\
 [tailwindcss](https://tailwindcss.com/docs/editor-setup)\
 [shadcn/ui](https://ui.shadcn.com/docs)\
+[Chart.js](https://www.chartjs.org/docs/latest/getting-started/)\
 [TypeORM](https://typeorm.io/)\
 [PostgreSQL](https://www.postgresql.org/docs/current/index.html)\
 [Docker](https://docs.docker.com/manuals/)
