@@ -1,7 +1,7 @@
-export default function Home() {
+export default function TransactionsPage() {
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <h1>Home Page</h1>
+      <div>Transactions Page</div>
     </div>
   );
 }

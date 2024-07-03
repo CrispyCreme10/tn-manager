@@ -85,6 +85,7 @@ NOTE: Ensure you have the following in a **.env** located in the root dir of the
 ### Suggested VS Code Extensions
 [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)\
 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)\
+[Nextjs snippets](https://marketplace.visualstudio.com/items?itemName=PulkitGangwar.nextjs-snippets)\
 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)\
 [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)\
 [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
