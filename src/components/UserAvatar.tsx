@@ -1,6 +1,5 @@
 "use client";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Session } from "next-auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
 
 const USER_AVATAR_FALLBACK = "X";
 
-export default function UserAvatar({ session }: { session: Session | null }) {
+export default function UserAvatar() {
   const getAbbreviatedUserName = (name: string | null | undefined) => {
     if (!name) return USER_AVATAR_FALLBACK; // X is cool default
 
@@ -26,20 +24,20 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
+        {/* <Avatar className="cursor-pointer">
           <AvatarImage src={session?.user?.image ?? undefined} />
           <AvatarFallback>
             {!session?.user?.image
               ? getAbbreviatedUserName(session?.user?.name)
               : USER_AVATAR_FALLBACK}
           </AvatarFallback>
-        </Avatar>
+        </Avatar> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <LogOut className="mr-2 h-4 w-4" />
-            <span onClick={() => signOut()}>Log out</span>
+            <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
