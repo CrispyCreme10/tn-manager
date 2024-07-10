@@ -1,41 +1,41 @@
 import { AccountType } from "@/models/accounts/account";
 import { formatNumber } from "@/utils/currency";
 
-type AccountTypeAmountColorOpts =
-  | "text-red-500"
-  | "text-green-500"
-  | "text-current";
+type TransactionType =
+  | -1
+  | 1
+  | 0;
 
 const ACCT_TYPE_DEBIT_MAP: {
-  [key in AccountType]: AccountTypeAmountColorOpts;
+  [key in AccountType]: TransactionType;
 } = {
-  [AccountType.Checking]: "text-green-500",
-  [AccountType.Savings]: "text-current",
-  [AccountType.Credit]: "text-red-500",
-  [AccountType.Investment]: "text-green-500",
-  [AccountType.PersonalLoan]: "text-red-500",
-  [AccountType.Mortgage]: "text-red-500",
-  [AccountType.AutoLoan]: "text-red-500",
-  [AccountType.BusinessChecking]: "text-green-500",
-  [AccountType.BusinessSavings]: "text-current",
-  [AccountType.BusinessCredit]: "text-red-500",
-  [AccountType.Custodial]: "text-current",
+  [AccountType.Checking]: 1,
+  [AccountType.Savings]: 0,
+  [AccountType.Credit]: -1,
+  [AccountType.Investment]: 1,
+  [AccountType.PersonalLoan]: -1,
+  [AccountType.Mortgage]: -1,
+  [AccountType.AutoLoan]: -1,
+  [AccountType.BusinessChecking]: 1,
+  [AccountType.BusinessSavings]: 0,
+  [AccountType.BusinessCredit]: -1,
+  [AccountType.Custodial]: 0,
 };
 
 const ACCT_TYPE_CREDIT_MAP: {
-  [key in AccountType]: AccountTypeAmountColorOpts;
+  [key in AccountType]: TransactionType;
 } = {
-  [AccountType.Checking]: "text-red-500",
-  [AccountType.Savings]: "text-current",
-  [AccountType.Credit]: "text-green-500",
-  [AccountType.Investment]: "text-red-500",
-  [AccountType.PersonalLoan]: "text-green-500",
-  [AccountType.Mortgage]: "text-green-500",
-  [AccountType.AutoLoan]: "text-green-500",
-  [AccountType.BusinessChecking]: "text-red-500",
-  [AccountType.BusinessSavings]: "text-current",
-  [AccountType.BusinessCredit]: "text-green-500",
-  [AccountType.Custodial]: "text-current",
+  [AccountType.Checking]: -1,
+  [AccountType.Savings]: 0,
+  [AccountType.Credit]: 1,
+  [AccountType.Investment]: -1,
+  [AccountType.PersonalLoan]: 1,
+  [AccountType.Mortgage]: 1,
+  [AccountType.AutoLoan]: 1,
+  [AccountType.BusinessChecking]: -1,
+  [AccountType.BusinessSavings]: 0,
+  [AccountType.BusinessCredit]: 1,
+  [AccountType.Custodial]: 0,
 };
 
 export class WidgetItem {
@@ -54,7 +54,7 @@ export class WidgetItem {
     return this.tranAmt > 0 ? `+${fmtAmt}` : fmtAmt;
   }
 
-  public get amountColor(): AccountTypeAmountColorOpts {
+  public get transactionType(): TransactionType {
     if (this.tranAmt < 0) {
       return ACCT_TYPE_CREDIT_MAP[this.acctType];
     } else {
