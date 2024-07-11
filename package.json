@@ -10,12 +10,13 @@
     "prettier-format": "prettier --config .prettierrc './**/*.{ts,tsx}' --write",
     "pg-start": "docker compose -f src/docker/postgres_pgadmin/docker-compose.yml up -d",
     "pg-stop": "docker compose -f src/docker/postgres_pgadmin/docker-compose.yml stop",
-    "dev-migrate": "npx drizzle-kit push",
+    "drizzle-push": "npx drizzle-kit push",
     "migrate": "",
     "apply-migrations": ""
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.1",
+    "@neondatabase/serverless": "^0.9.4",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.0",
