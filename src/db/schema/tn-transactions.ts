@@ -1,6 +1,6 @@
 import { boolean, char, numeric, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { tnAccounts } from "@/db/schema/tn-accounts";
-import { tnCategories } from "@/db/schema/tn-category";
+import { tnCategories } from "@/db/schema/tn-categories";
 
 export const transactionStatus = pgEnum("transaction_status", ["pending", "completed", "failed"]);
 
