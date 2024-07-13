@@ -1,23 +1,104 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
-import { NewTnAccount, tnAccounts } from "@/db/schema/tn-accounts";
+import { TnAccountsDrizzleRepository } from "@/db/repositories/tn-accounts-repository";
+import { tnAccounts } from "@/db/schema/tn-accounts";
+import { generateUUID } from "@/utils/uuid";
+import { PostgresError } from 'pg-error-enum' 
 
 export async function GET(request: Request) {
-    
+  const accounts = await db.select().from(tnAccounts);
+
+  return new Response(JSON.stringify(accounts), {
+    headers: { "content-type": "application/json" },
+  });
 }
 
 export async function POST(request: Request) {
-    const reqBody = await request.json() as { name: string, balance: string };
+  const session = await auth();
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
 
-    try {
-        await db.insert(tnAccounts).values({
-            name: reqBody.name,
-            balance: reqBody.balance,
-        } as NewTnAccount);
-    } catch (error) {
-        return new Response(null, { status: 500 });
+  const reqBody = (await request.json()) as { name: string; balance: number };
+
+  if (
+    !reqBody.name ||
+    reqBody.balance === undefined ||
+    reqBody.balance === null
+  ) {
+    return new Response(null, { status: 400 });
+  }
+
+  let newId = null;
+  try {
+    const tnAccountsRepo = new TnAccountsDrizzleRepository();
+    newId = await tnAccountsRepo.create({
+      id: generateUUID(),
+      userId: session.userId,
+      name: reqBody.name,
+      balance: reqBody.balance.toString(),
+    });
+  } catch (error: any) {
+    console.log("error:", error);
+    
+    if (error && error.code == PostgresError.UNIQUE_VIOLATION) {
+      return new Response(error.code, { status: 400 });
     }
 
-    const response = new Response(null, { status: 201 });
-    response.headers.set("Location", "/api/accounts");
-    return response;
+    return new Response(null, { status: 500 });
+  }
+
+  const response = new Response(null, { status: 201 });
+  response.headers.set("Location", "/api/accounts/" + newId);
+  return response;
+}
+
+export async function PUT(request: Request) {
+  const reqBody = (await request.json()) as {
+    id: string;
+    name: string;
+    balance: number;
+  };
+
+  console.log("put body:", reqBody);
+
+  if (
+    reqBody.name === "" ||
+    reqBody.balance === undefined ||
+    reqBody.balance === null
+  ) {
+    return new Response(null, { status: 400 });
+  }
+
+  try {
+    const tnAccountsRepo = new TnAccountsDrizzleRepository();
+    tnAccountsRepo.update({
+      id: reqBody.id,
+      name: reqBody.name,
+      balance: reqBody.balance.toString(),
+    });
+  } catch (error) {
+    console.log("error:", error);
+    return new Response(null, { status: 500 });
+  }
+
+  return new Response(null, { status: 204 });
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const tnAccountsRepo = new TnAccountsDrizzleRepository();
+    const deletedId = tnAccountsRepo.delete(params.id);
+
+    if (deletedId === undefined || deletedId === null) {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return new Response(null, { status: 500 });
+  }
+
+  return new Response(null, { status: 204 });
 }

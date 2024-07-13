@@ -3,26 +3,15 @@ import { columns } from "@/app/accounts/table-column";
 import { Button } from "@/components/ui/button";
 import { TnAccount } from "@/db/schema/tn-accounts";
 import AddEditDialog from "./add-edit-dialog";
+import { TnAccountsDrizzleRepository } from "@/db/repositories/tn-accounts-repository";
 
-async function getData(): Promise<TnAccount[]> {
-  return [
-    {
-      id: "1",
-      userId: "1",
-      name: "Checking",
-      balance: "1000",
-    },
-    {
-      id: "2",
-      userId: "1",
-      name: "Savings",
-      balance: "5000",
-    },
-  ];
+async function getAllTnAccountsForUser(): Promise<TnAccount[]> {
+  const tnAccountsRepo = new TnAccountsDrizzleRepository();
+  return await tnAccountsRepo.getAll();
 }
 
 export default async function AccountsList() {
-  const data = await getData();
+  const data = await getAllTnAccountsForUser();
 
   return (
     <div className="w-full h-full flex flex-col">

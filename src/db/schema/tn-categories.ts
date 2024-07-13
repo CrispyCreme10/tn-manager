@@ -1,7 +1,7 @@
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const tnCategories = pgTable("tn_category", {
-    id: text("id").notNull().primaryKey(),
+    id: text('id').primaryKey(),
     name: text("name"),
     color: varchar("color", { length: 6 }),
 });

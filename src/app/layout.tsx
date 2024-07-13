@@ -5,6 +5,7 @@ import SideNavMenu from "@/components/side-nav/SideNavMenu";
 import TopUserBar from "@/components/top-bar/TopUserBar";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
             <div className="flex flex-col flex-1 h-full">
               <TopUserBar session={session} />
               <main className="flex-1">{children}</main>
+              <Toaster />
             </div>
           </div>
         </SessionProvider>
