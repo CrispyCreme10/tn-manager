@@ -12,6 +12,7 @@ export default async function AccountPage({ params }: { params: { id: string } }
   return (
     <div>
       <h1>{tnAccount?.name}</h1>
+      <p>{tnAccount?.acctType}</p>
       <p>{tnAccount?.balance}</p>
     </div>
   );

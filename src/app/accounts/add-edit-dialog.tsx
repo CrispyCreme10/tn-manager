@@ -29,12 +29,21 @@ import { useSession } from "next-auth/react";
 import { PostgresError } from "pg-error-enum";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AccountType } from "@/models/accounts/account";
 
 const formSchema = z.object({
   name: z
     .string()
     .min(1, "Account name cannot be empty.")
     .max(50, "Account name cannot exceed 50 characters."),
+  acctType: z.string(),
   balance: z.number().safe(),
 });
 
@@ -48,11 +57,13 @@ export default function AddEditDialog({
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const isEditMode = !!tnAccount;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: tnAccount?.name ?? "",
+      acctType: tnAccount?.acctType ?? AccountType.Checking,
       balance: parseFloat(tnAccount?.balance ?? "0") ?? 0,
     },
   });
@@ -71,7 +82,9 @@ export default function AddEditDialog({
     }
   }
 
-  async function handlePOST(values: z.infer<typeof formSchema>): Promise<boolean> {
+  async function handlePOST(
+    values: z.infer<typeof formSchema>
+  ): Promise<boolean> {
     const res = await fetch("/api/accounts", {
       method: "POST",
       headers: {
@@ -103,7 +116,9 @@ export default function AddEditDialog({
     }
   }
 
-  async function handlePUT(values: z.infer<typeof formSchema>): Promise<boolean> {
+  async function handlePUT(
+    values: z.infer<typeof formSchema>
+  ): Promise<boolean> {
     const res = await fetch("/api/accounts", {
       method: "PUT",
       headers: {
@@ -135,14 +150,17 @@ export default function AddEditDialog({
     }
   }
 
-  999_999_999_999_999.99
-
   return (
-    <Dialog open={open} onOpenChange={handleDialogOpenChange} >
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>{triggerJsx}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
-          <DialogTitle>{tnAccount ? "Edit Account" : "Add Account"}</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? "Edit Account" : "Add Account"}
+          </DialogTitle>
           <DialogDescription>
             Make changes to your account here. Click save when you're done.
           </DialogDescription>
@@ -160,6 +178,37 @@ export default function AddEditDialog({
                   </FormControl>
                   <FormDescription>
                     This is your account's name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="acctType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isEditMode}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue></SelectValue>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="SelectContent">
+                      {Object.values(AccountType).sort().map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    This is your account's type.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -189,7 +238,7 @@ export default function AddEditDialog({
             />
             <DialogFooter>
               <Button type="submit">
-                {tnAccount ? "Save changes" : "Add account"}
+                {isEditMode ? "Save changes" : "Add account"}
               </Button>
             </DialogFooter>
           </form>

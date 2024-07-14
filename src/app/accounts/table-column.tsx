@@ -10,6 +10,10 @@ export const columns: ColumnDef<TnAccount>[] = [
     header: "Account name",
   },
   {
+    accessorKey: "acctType",
+    header: "Account type",
+  },
+  {
     accessorKey: "balance",
     header: "Balance",
     cell: ({ row }) => {

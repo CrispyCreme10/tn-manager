@@ -88,3 +88,8 @@ body {
   margin: 0;
   height: 100%;
 }
+
+.SelectContent {
+  width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+}
