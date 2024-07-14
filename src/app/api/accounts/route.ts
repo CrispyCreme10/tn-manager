@@ -39,8 +39,6 @@ export async function POST(request: Request) {
       balance: reqBody.balance.toString(),
     });
   } catch (error: any) {
-    console.log("error:", error);
-    
     if (error && error.code == PostgresError.UNIQUE_VIOLATION) {
       return new Response(error.code, { status: 400 });
     }
@@ -79,24 +77,6 @@ export async function PUT(request: Request) {
     });
   } catch (error) {
     console.log("error:", error);
-    return new Response(null, { status: 500 });
-  }
-
-  return new Response(null, { status: 204 });
-}
-
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const tnAccountsRepo = new TnAccountsDrizzleRepository();
-    const deletedId = tnAccountsRepo.delete(params.id);
-
-    if (deletedId === undefined || deletedId === null) {
-      return new Response(null, { status: 404 });
-    }
-  } catch (error) {
     return new Response(null, { status: 500 });
   }
 

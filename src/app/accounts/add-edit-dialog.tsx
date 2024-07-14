@@ -27,13 +27,15 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { PostgresError } from "pg-error-enum";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z
     .string()
     .min(1, "Account name cannot be empty.")
     .max(50, "Account name cannot exceed 50 characters."),
-  balance: z.number(),
+  balance: z.number().safe(),
 });
 
 export default function AddEditDialog({
@@ -43,8 +45,9 @@ export default function AddEditDialog({
   triggerJsx: JSX.Element;
   tnAccount?: TnAccount | null;
 }) {
-  const session = useSession()
+  const router = useRouter();
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,14 +58,20 @@ export default function AddEditDialog({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    let isSuccesful = false;
     if (tnAccount) {
-      handlePUT(values);
+      isSuccesful = await handlePUT(values);
     } else {
-      handlePOST(values);
+      isSuccesful = await handlePOST(values);
+    }
+
+    if (isSuccesful) {
+      handleDialogOpenChange(false);
+      router.refresh();
     }
   }
 
-  async function handlePOST(values: z.infer<typeof formSchema>) {
+  async function handlePOST(values: z.infer<typeof formSchema>): Promise<boolean> {
     const res = await fetch("/api/accounts", {
       method: "POST",
       headers: {
@@ -73,8 +82,8 @@ export default function AddEditDialog({
 
     if (res.status === 201) {
       toast({ description: "Account added successfully." });
+      return true;
     } else {
-
       const resBody = await res.json();
       console.log(resBody);
       if (resBody == PostgresError.UNIQUE_VIOLATION) {
@@ -90,10 +99,11 @@ export default function AddEditDialog({
           description: "Failed to add account.",
         });
       }
+      return false;
     }
   }
 
-  async function handlePUT(values: z.infer<typeof formSchema>) {
+  async function handlePUT(values: z.infer<typeof formSchema>): Promise<boolean> {
     const res = await fetch("/api/accounts", {
       method: "PUT",
       headers: {
@@ -105,31 +115,36 @@ export default function AddEditDialog({
       }),
     });
 
-    if (res.status === 200) {
+    if (res.status === 204) {
       toast({ description: "Account updated successfully." });
+      return true;
     } else {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: "Failed to update account.",
       });
+      return false;
     }
   }
 
   function handleDialogOpenChange(open: boolean) {
+    setOpen(open);
     if (!open) {
       setTimeout(() => form.reset(), 200); // use set timeout to avoid flicker
     }
   }
 
+  999_999_999_999_999.99
+
   return (
-    <Dialog onOpenChange={handleDialogOpenChange}>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange} >
       <DialogTrigger asChild>{triggerJsx}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>{tnAccount ? "Edit Account" : "Add Account"}</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your account here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -159,7 +174,8 @@ export default function AddEditDialog({
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="Balance"
+                      pattern="([0-9]{1,3}).([0-9]{1,3})"
+                      step="0.01"
                       {...field}
                       onChange={(e) => field.onChange(+e.target.value)}
                     />

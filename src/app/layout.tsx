@@ -6,6 +6,8 @@ import TopUserBar from "@/components/top-bar/TopUserBar";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import ConfirmationDialogProvider from "@/components/ConfirmationDialogProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +30,11 @@ export default async function RootLayout({
             <SideNavMenu />
             <div className="flex flex-col flex-1 h-full">
               <TopUserBar session={session} />
-              <main className="flex-1">{children}</main>
+              {/* <ConfirmationDialogProvider> */}
+                <main className="flex-1">{children}</main>
+              {/* </ConfirmationDialogProvider> */}
+
+              {/* Global Components */}
               <Toaster />
             </div>
           </div>
