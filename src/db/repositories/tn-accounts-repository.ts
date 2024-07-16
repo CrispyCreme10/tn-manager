@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 
 export interface TnAccountsRepository {
   getById(id: string): Promise<TnAccount | null>;
-  getAll(): Promise<TnAccount[]>;
+  getAll(userId: string): Promise<TnAccount[]>;
   create(tnAccount: TnAccount): Promise<string>;
   update(tnAccount: Partial<TnAccount>): Promise<string>;
   delete(id: string): Promise<string>;
@@ -17,15 +17,18 @@ export class TnAccountsDrizzleRepository implements TnAccountsRepository {
     }
 
     const [account] = await db
-    .select()
-    .from(tnAccounts)
-    .where(eq(tnAccounts.id, id));
+      .select()
+      .from(tnAccounts)
+      .where(eq(tnAccounts.id, id));
 
     return account ?? null;
   }
 
-  async getAll(): Promise<TnAccount[]> {
-    return await db.select().from(tnAccounts);
+  async getAll(userId: string): Promise<TnAccount[]> {
+    return await db
+      .select()
+      .from(tnAccounts)
+      .where(eq(tnAccounts.userId, userId));
   }
 
   async create(tnAccount: TnAccount): Promise<string> {
@@ -58,8 +61,8 @@ export class TnAccountsDrizzleRepository implements TnAccountsRepository {
       .update(tnAccounts)
       .set({ name: tnAccount.name, balance: tnAccount.balance })
       .where(eq(tnAccounts.id, tnAccount.id))
-      .returning({ id: tnAccounts.id })
-    
+      .returning({ id: tnAccounts.id });
+
     return id;
   }
 

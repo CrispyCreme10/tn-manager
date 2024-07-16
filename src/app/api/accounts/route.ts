@@ -2,13 +2,23 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { TnAccountsDrizzleRepository } from "@/db/repositories/tn-accounts-repository";
 import { tnAccounts } from "@/db/schema/tn-accounts";
+import { AccountType } from "@/models/accounts/account";
 import { generateUUID } from "@/utils/uuid";
-import { PostgresError } from 'pg-error-enum' 
+import { eq } from "drizzle-orm";
+import { PostgresError } from "pg-error-enum";
 
 export async function GET(request: Request) {
-  const accounts = await db.select().from(tnAccounts);
+  const session = await auth();
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
 
-  return new Response(JSON.stringify(accounts), {
+  const userAccounts = await db
+    .select()
+    .from(tnAccounts)
+    .where(eq(tnAccounts.userId, session.userId));
+
+  return new Response(JSON.stringify(userAccounts), {
     headers: { "content-type": "application/json" },
   });
 }
@@ -19,7 +29,11 @@ export async function POST(request: Request) {
     return new Response(null, { status: 401 });
   }
 
-  const reqBody = (await request.json()) as { name: string; balance: number };
+  const reqBody = (await request.json()) as {
+    name: string;
+    acctType: AccountType;
+    balance: number;
+  };
 
   if (
     !reqBody.name ||
@@ -36,6 +50,7 @@ export async function POST(request: Request) {
       id: generateUUID(),
       userId: session.userId,
       name: reqBody.name,
+      acctType: reqBody.acctType,
       balance: reqBody.balance.toString(),
     });
   } catch (error: any) {
